@@ -16,6 +16,10 @@ public abstract class State {
 		return stateTransition.get(input);
 	}
 	
+	public int totalTransitions () {
+		return stateTransition.size();
+	}
+	
 	public void addTransitionState (String input, State newState) {
 		stateTransition.put(input, newState);
 	}

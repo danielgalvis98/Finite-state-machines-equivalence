@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
 
-public class FiniteStateMachine {
+public abstract class FiniteStateMachine {
 	private HashSet<String> inputAlphabet;
 	private HashSet<String> outputAlphabet;
 	private ArrayList<State> states;
@@ -21,6 +21,44 @@ public class FiniteStateMachine {
 	
 	public void addOutputAlphabetElement (String outputElement) {
 		outputAlphabet.add(outputElement);
+	}
+	
+	public void addState (State newState) {
+		states.add(newState);
+	}
+	
+	public void addStateTransition (String inputElement, int fromState, int toState) throws Exception {
+		if (!inputAlphabet.contains(inputElement)) {
+			throw new Exception("El elemento de entrada debe de pertencer al alfabeto S");
+		}
+		
+		State firstState = states.get(fromState);
+		State directedState = states.get(toState);
+		
+		firstState.addTransitionState(inputElement, directedState);
+	}
+	
+	public void addOutputTransition (String input, int onState, String output) throws Exception{
+		if (!inputAlphabet.contains(input)) {
+			throw new Exception("El elemento de entrada debe de pertencer al alfabeto S");
+		}
+		
+		if (!outputAlphabet.contains(output)) {
+			throw new Exception("El elemento de salida debe de pertenecer al alfabeto R");
+		}
+		
+		MealyState theState = (MealyState) states.get(onState);
+		theState.addOutput(input, output);
+	}
+	
+	public boolean isComplete() {
+		boolean complete = true;
+		int stateIndex = 0;
+		while (complete && stateIndex < states.size()) {
+			State act = states.get(stateIndex);
+			complete &= inputAlphabet.size() == act.totalTransitions();
+		}
+		return complete;
 	}
 	
 	public void deleteInaccessibleStates() {
