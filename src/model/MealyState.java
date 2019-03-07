@@ -19,5 +19,9 @@ public class MealyState extends State{
 	public void addOutput(String input, String output) {
 		outputFunction.put(input, output);
 	}
+	
+	public int getTotalOutputs() {
+		return outputFunction.size();
+	}
 
 }

@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
 
-public abstract class FiniteStateMachine {
+public class FiniteStateMachine {
+	public static char MOORE = 'o';
+	public static char MEALY = 'e';
+	
+	private char type;
 	private HashSet<String> inputAlphabet;
 	private HashSet<String> outputAlphabet;
 	private ArrayList<State> states;
 	
-	public FiniteStateMachine() {
+	public FiniteStateMachine(char type) {
 		inputAlphabet = new HashSet<String>();
 		outputAlphabet = new HashSet<String>();
 		states = new ArrayList<State>();
+		this.type = type;
 	}
 	
 	public void addInputAlphabetElement (String inputElement) {
@@ -39,16 +44,18 @@ public abstract class FiniteStateMachine {
 	}
 	
 	public void addOutputTransition (String input, int onState, String output) throws Exception{
-		if (!inputAlphabet.contains(input)) {
-			throw new Exception("El elemento de entrada debe de pertencer al alfabeto S");
+		if (type == MEALY) {
+			if (!inputAlphabet.contains(input)) {
+				throw new Exception("El elemento de entrada debe de pertencer al alfabeto S");
+			}
+			
+			if (!outputAlphabet.contains(output)) {
+				throw new Exception("El elemento de salida debe de pertenecer al alfabeto R");
+			}
+			
+			MealyState theState = (MealyState) states.get(onState);
+			theState.addOutput(input, output);	
 		}
-		
-		if (!outputAlphabet.contains(output)) {
-			throw new Exception("El elemento de salida debe de pertenecer al alfabeto R");
-		}
-		
-		MealyState theState = (MealyState) states.get(onState);
-		theState.addOutput(input, output);
 	}
 	
 	public boolean isComplete() {
@@ -57,6 +64,8 @@ public abstract class FiniteStateMachine {
 		while (complete && stateIndex < states.size()) {
 			State act = states.get(stateIndex);
 			complete &= inputAlphabet.size() == act.totalTransitions();
+			if (type == MEALY)
+				complete &= inputAlphabet.size() == ((MealyState) act).totalTransitions();
 		}
 		return complete;
 	}
