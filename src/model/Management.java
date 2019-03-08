@@ -8,12 +8,10 @@ public class Management {
 	private FiniteStateMachine directSumMachine;
 	private FiniteStateMachine m1; 
 	private FiniteStateMachine m2;
-	private String[] inputAlphabet;
 	
 	public void renameStatesAndDoDirectSum() {
 		ArrayList<State> s1= m1.getStates();
 		ArrayList<State> s2= m2.getStates();
-		inputAlphabet = m1.getInputAlphabetArray();
 		if(s1.get(0) instanceof MealyState) {
 			directSumMachine = new FiniteStateMachine(FiniteStateMachine.MEALY);
 		}else {
