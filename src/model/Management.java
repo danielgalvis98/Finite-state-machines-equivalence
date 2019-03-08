@@ -5,34 +5,38 @@ import java.util.HashMap;
 
 public class Management {
 
-	private FiniteStateMachine m;
+	private FiniteStateMachine directSumMachine;
+	private FiniteStateMachine m1; 
+	private FiniteStateMachine m2;
 	private String[] inputAlphabet;
-	public void renameStatesAndDoDirectSum(FiniteStateMachine m1, FiniteStateMachine m2) {
+	
+	public void renameStatesAndDoDirectSum() {
 		ArrayList<State> s1= m1.getStates();
 		ArrayList<State> s2= m2.getStates();
-		inputAlphabet = m1.getInputAlphabet();
+		inputAlphabet = m1.getInputAlphabetArray();
 		if(s1.get(0) instanceof MealyState) {
-			m = new FiniteStateMachine(FiniteStateMachine.MEALY);
+			directSumMachine = new FiniteStateMachine(FiniteStateMachine.MEALY);
 		}else {
-			m = new FiniteStateMachine(FiniteStateMachine.MOORE);
-			
+			directSumMachine = new FiniteStateMachine(FiniteStateMachine.MOORE);
 		}
+		directSumMachine.setInputAlphabet(m1.getInputAlphabet());
+		directSumMachine.setOutputAlphabet(m1.getOutputAlphabet());
 		for(int i=0;i<m1.getStates().size()+m2.getStates().size();i++) {
 			if(i<s1.size()) {
 				s1.get(i).setName(i+"");
-				m.addState(s1.get(i));
+				directSumMachine.addState(s1.get(i));
 			}else {
 				s2.get(i-s2.size()-1).setName(i+"");
-				m.addState(s2.get(i-s2.size()));
+				directSumMachine.addState(s2.get(i-s2.size() - 1));
 			}
 		}
 	}
 	
 	public ArrayList<ArrayList<State>> firstPartitioning() {
 		HashMap<String, ArrayList<State>> groups= new HashMap<String, ArrayList<State>>();
-		ArrayList<State> s= m.getStates();
-		if(m!= null) {
-			if(m.getType()== FiniteStateMachine.MEALY) {
+		ArrayList<State> s= directSumMachine.getStates();
+		if(directSumMachine!= null) {
+			if(directSumMachine.getType()== FiniteStateMachine.MEALY) {
 				for(int i=0;i<s.size();i++) {
 					String str="";
 					for(int j=0;j<inputAlphabet.length;j++) {

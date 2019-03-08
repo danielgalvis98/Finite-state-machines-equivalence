@@ -1,26 +1,35 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
 
 public class FiniteStateMachine {
 	public static char MOORE = 'o';
 	public static char MEALY = 'e';
-	
+
 	private char type;
 	private HashSet<String> inputAlphabet;
 	private HashSet<String> outputAlphabet;
 	private ArrayList<State> states;
-	
+
 	public FiniteStateMachine(char type) {
 		inputAlphabet = new HashSet<String>();
 		outputAlphabet = new HashSet<String>();
 		states = new ArrayList<State>();
 		this.type = type;
 	}
-	
-	public String[] getInputAlphabet() {
+
+	public void setInputAlphabet (HashSet<String> input) {
+		inputAlphabet = input;
+	}
+
+	public void setOutputAlphabet (HashSet<String> output) {
+		inputAlphabet = output;
+	}
+
+	public String[] getInputAlphabetArray() {
 		Object[] a= inputAlphabet.toArray();
 		String[] toR=  new String[a.length];
 		for(int i=0;i<toR.length;i++) {
@@ -28,45 +37,78 @@ public class FiniteStateMachine {
 		}
 		return toR;
 	}
+
+	public ArrayList<ArrayList<State>> firstPartiononing (){
+		HashMap<String, ArrayList<State>> groups= new HashMap<String, ArrayList<State>>();
+		for(int i=0;i<states.size();i++) {
+			String str="";
+			for(String x : inputAlphabet) {
+				str+=states.get(i).getOutput(x);
+			}
+			if(groups.containsKey(str)) {
+				groups.get(str).add(states.get(i));
+			}else {
+				ArrayList<State> toAdd= new ArrayList<State>();
+				toAdd.add(states.get(i));
+				groups.put(str, toAdd);
+			}
+
+		}
+
+		ArrayList<ArrayList<State>> toR= new ArrayList<ArrayList<State>>();
+		for (String v : groups.keySet() ) {
+			toR.add(groups.get(v));
+		}
+		return toR;
+	}
+
+	public HashSet<String> getInputAlphabet(){
+		return inputAlphabet;
+	}
+
+	public HashSet<String> getOutputAlphabet(){
+		return outputAlphabet;
+	}
+
 	public void addInputAlphabetElement (String inputElement) {
 		inputAlphabet.add(inputElement);
-		
+
 	}
-	
+
 	public void addOutputAlphabetElement (String outputElement) {
 		outputAlphabet.add(outputElement);
 	}
-	
+
 	public void addState (State newState) {
 		states.add(newState);
 	}
-	
+
 	public void addStateTransition (String inputElement, int fromState, int toState) throws Exception {
 		if (!inputAlphabet.contains(inputElement)) {
 			throw new Exception("El elemento de entrada debe de pertencer al alfabeto S");
 		}
-		
+
 		State firstState = states.get(fromState);
 		State directedState = states.get(toState);
-		
+
 		firstState.addTransitionState(inputElement, directedState);
 	}
-	
+
 	public void addOutputTransition (String input, int onState, String output) throws Exception{
 		if (type == MEALY) {
 			if (!inputAlphabet.contains(input)) {
 				throw new Exception("El elemento de entrada debe de pertencer al alfabeto S");
 			}
-			
+
 			if (!outputAlphabet.contains(output)) {
 				throw new Exception("El elemento de salida debe de pertenecer al alfabeto R");
 			}
-			
+
 			MealyState theState = (MealyState) states.get(onState);
 			theState.addOutput(input, output);	
 		}
 	}
-	
+
 	public boolean isComplete() {
 		boolean complete = true;
 		int stateIndex = 0;
@@ -78,7 +120,7 @@ public class FiniteStateMachine {
 		}
 		return complete;
 	}
-	
+
 	public void deleteInaccessibleStates() {
 		HashSet<State> accesibleStates = getAccesibleStates();
 		for (State st : states) {
@@ -87,7 +129,7 @@ public class FiniteStateMachine {
 			}
 		}
 	}
-	
+
 	public HashSet<State> getAccesibleStates (){
 		HashSet<State> accesibleStates = new HashSet<State>();
 		State init = states.get(0);
@@ -109,7 +151,7 @@ public class FiniteStateMachine {
 	public ArrayList<State> getStates(){
 		return states;
 	}
-	
+
 	public char getType() {
 		return type;
 	}
