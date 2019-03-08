@@ -20,8 +20,17 @@ public class FiniteStateMachine {
 		this.type = type;
 	}
 	
+	public String[] getInputAlphabet() {
+		Object[] a= inputAlphabet.toArray();
+		String[] toR=  new String[a.length];
+		for(int i=0;i<toR.length;i++) {
+			toR[i]= (String) a[i];
+		}
+		return toR;
+	}
 	public void addInputAlphabetElement (String inputElement) {
 		inputAlphabet.add(inputElement);
+		
 	}
 	
 	public void addOutputAlphabetElement (String outputElement) {
@@ -96,5 +105,12 @@ public class FiniteStateMachine {
 			}
 		}
 		return accesibleStates;
+	}
+	public ArrayList<State> getStates(){
+		return states;
+	}
+	
+	public char getType() {
+		return type;
 	}
 }

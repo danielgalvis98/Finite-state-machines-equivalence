@@ -20,12 +20,16 @@ public abstract class State {
 		return stateTransition.size();
 	}
 	
+	
 	public void addTransitionState (String input, State newState) {
 		stateTransition.put(input, newState);
 	}
 	
 	public boolean transitionExists (String input) {
 		return stateTransition.containsKey(input);
+	}
+	public void setName(String n) {
+		name = n;
 	}
 	
 	public abstract String getOutput(String input);

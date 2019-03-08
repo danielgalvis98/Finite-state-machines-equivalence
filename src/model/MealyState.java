@@ -9,7 +9,9 @@ public class MealyState extends State{
 	public MealyState(String name) {
 		super(name);
 		outputFunction = new HashMap<String, String>();
+		
 	}
+	
 
 	@Override
 	public String getOutput(String input) {
