@@ -32,35 +32,35 @@ public class Management {
 		}
 	}
 	
-	public ArrayList<ArrayList<State>> firstPartitioning() {
-		HashMap<String, ArrayList<State>> groups= new HashMap<String, ArrayList<State>>();
-		ArrayList<State> s= directSumMachine.getStates();
-		if(directSumMachine!= null) {
-			if(directSumMachine.getType()== FiniteStateMachine.MEALY) {
-				for(int i=0;i<s.size();i++) {
-					String str="";
-					for(int j=0;j<inputAlphabet.length;j++) {
-						str+=s.get(i).getOutput(inputAlphabet[j]);
-					}
-					if(groups.containsKey(str)) {
-						groups.get(str).add(s.get(i));
-					}else {
-						ArrayList<State> toAdd= new ArrayList<State>();
-						toAdd.add(s.get(i));
-						groups.put(str, toAdd);
-					}
-						
-				}
-			}else {
-				//TODO
-			}
-		}
-		
-		ArrayList<ArrayList<State>> toR= new ArrayList<ArrayList<State>>();
-		for (String v : groups.keySet() ) {
-			toR.add(groups.get(v));
-		}
-		return toR;
-	}
+//	public ArrayList<ArrayList<State>> firstPartitioning() {
+//		HashMap<String, ArrayList<State>> groups= new HashMap<String, ArrayList<State>>();
+//		ArrayList<State> s= directSumMachine.getStates();
+//		if(directSumMachine!= null) {
+//			if(directSumMachine.getType()== FiniteStateMachine.MEALY) {
+//				for(int i=0;i<s.size();i++) {
+//					String str="";
+//					for(int j=0;j<inputAlphabet.length;j++) {
+//						str+=s.get(i).getOutput(inputAlphabet[j]);
+//					}
+//					if(groups.containsKey(str)) {
+//						groups.get(str).add(s.get(i));
+//					}else {
+//						ArrayList<State> toAdd= new ArrayList<State>();
+//						toAdd.add(s.get(i));
+//						groups.put(str, toAdd);
+//					}
+//						
+//				}
+//			}else {
+//				//TODO
+//			}
+//		}
+//		
+//		ArrayList<ArrayList<State>> toR= new ArrayList<ArrayList<State>>();
+//		for (String v : groups.keySet() ) {
+//			toR.add(groups.get(v));
+//		}
+//		return toR;
+//	}
 
 }
