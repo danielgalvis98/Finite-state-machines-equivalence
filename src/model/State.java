@@ -10,6 +10,7 @@ public abstract class State {
 	public State (String name) {
 		this.name = name;
 		stateTransition = new HashMap<String, State>();
+		
 	}
 	
 	public State getTransitionState (String input) {
@@ -31,7 +32,9 @@ public abstract class State {
 	public void setName(String n) {
 		name = n;
 	}
-	
+	public HashMap<String, State> getStateTransition(){
+		return stateTransition;
+	}
 	public abstract String getOutput(String input);
 	
 	public String getName() {

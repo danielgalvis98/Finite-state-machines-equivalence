@@ -14,6 +14,7 @@ public class FiniteStateMachine {
 	private HashSet<String> outputAlphabet;
 	private ArrayList<State> states;
 
+	private HashMap<State, Integer> indexesOfPartition; 
 	public FiniteStateMachine(char type) {
 		inputAlphabet = new HashSet<String>();
 		outputAlphabet = new HashSet<String>();
@@ -60,6 +61,64 @@ public class FiniteStateMachine {
 			toR.add(groups.get(v));
 		}
 		return toR;
+	}
+	public ArrayList<ArrayList<State>> obtaintPartitions(){
+		ArrayList<ArrayList<State>> firstPartition= firstPartiononing();
+		initializeHashOfIndexOfPartition(firstPartition);
+		
+		return auxToObtainPartitions(firstPartition, firstPartition.size());
+	}
+	private ArrayList<ArrayList<State>> auxToObtainPartitions(ArrayList<ArrayList<State>> arr, int quantOfPartitions){
+		ArrayList<ArrayList<State>> newPartition = new ArrayList<ArrayList<State>>();
+		ArrayList<ArrayList<State>> newClasses = new ArrayList<ArrayList<State>>();
+		for(int i=0;i<arr.size();i++) {
+			ArrayList<State> candidateOfNewClass= new ArrayList<State>();
+			ArrayList<State> actualClass= arr.get(i);
+			ArrayList<State> newActualClass= new ArrayList<State>();
+			HashSet<Integer> positionsOfSucesors= new HashSet<Integer>();
+			for(int j=0;j<actualClass.size();j++) {
+				if(j==0) {
+					newActualClass.add(actualClass.get(j));
+					for(State x:actualClass.get(j).getStateTransition().values()) {
+						positionsOfSucesors.add(indexesOfPartition.get(x));
+					}
+				}else {
+					boolean sameClassesOfSucesors=true;
+					for(State x:actualClass.get(j).getStateTransition().values()) {
+						if(!positionsOfSucesors.contains(indexesOfPartition.get(x))) {
+							sameClassesOfSucesors=false;
+						}
+					}
+					if(!sameClassesOfSucesors) {
+						State toMove= actualClass.get(j);
+						candidateOfNewClass.add(toMove);
+					}else {
+						newActualClass.add(actualClass.get(j));
+					}
+				}
+			}
+			if(candidateOfNewClass.size()!=0) {
+				newClasses.add(candidateOfNewClass);
+			}
+		}
+		newPartition.addAll(newClasses);
+		if(newPartition.size()==arr.size()) {
+			return newPartition;
+		}else {
+			initializeHashOfIndexOfPartition(newPartition);
+			return auxToObtainPartitions(newPartition, newPartition.size());
+		}
+		
+	}
+	
+	public void initializeHashOfIndexOfPartition(ArrayList<ArrayList<State>> arr) {
+		indexesOfPartition= new HashMap<State, Integer>();
+		for(int i=0;i<arr.size();i++) {
+			ArrayList<State> partition= arr.get(i);
+			for(int j=0;j<partition.size();j++) {
+				indexesOfPartition.put(partition.get(j), i);
+			}
+		}
 	}
 
 	public HashSet<String> getInputAlphabet(){
