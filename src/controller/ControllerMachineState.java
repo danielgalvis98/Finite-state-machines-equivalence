@@ -1,20 +1,41 @@
 package controller;
 
+import java.awt.TextField;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.AnchorPane;
+import model.FiniteStateMachine;
+import model.Management;
 
-public class ControllerMachineState {
+public class ControllerMachineState implements Initializable{
+
+	int automataNumber;
+	
+
 	
 	@FXML
 	AnchorPane rootPane;
 	
-	public void changePane (ActionEvent e) throws IOException {
-		AnchorPane pane = FXMLLoader.load(getClass().getResource("/application/FrameParameters.fxml"));
+	
+	public void saveAutomata (ActionEvent e) throws IOException {
+		automataNumber++;
+		AnchorPane pane = FXMLLoader.load(getClass().getResource("/application/FrameMachineState.fxml"));
 		rootPane.getChildren().setAll(pane);
+		System.out.println(automataNumber);
 	}
 
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		automataNumber++;
+	}
+	
 }

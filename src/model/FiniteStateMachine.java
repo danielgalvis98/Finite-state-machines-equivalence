@@ -13,13 +13,16 @@ public class FiniteStateMachine {
 	private HashSet<String> inputAlphabet;
 	private HashSet<String> outputAlphabet;
 	private ArrayList<State> states;
+	
+	int totStates;
 
 	private HashMap<State, Integer> indexesOfPartition; 
-	public FiniteStateMachine(char type) {
+	public FiniteStateMachine(char type, int totStates) {
 		inputAlphabet = new HashSet<String>();
 		outputAlphabet = new HashSet<String>();
 		states = new ArrayList<State>();
 		this.type = type;
+		this.totStates = totStates;
 	}
 
 	public void setInputAlphabet (HashSet<String> input) {
@@ -28,6 +31,10 @@ public class FiniteStateMachine {
 
 	public void setOutputAlphabet (HashSet<String> output) {
 		inputAlphabet = output;
+	}
+	
+	public int getTotalStates() {
+		return totStates;
 	}
 
 	public String[] getInputAlphabetArray() {

@@ -12,7 +12,7 @@
    <children>
       <AnchorPane layoutY="332.0" prefHeight="68.0" prefWidth="600.0">
          <children>
-            <Button layoutX="448.0" layoutY="22.0" mnemonicParsing="false" onAction="#changePane" prefHeight="25.0" prefWidth="126.0" text="Guardar autómata" />
+            <Button layoutX="448.0" layoutY="22.0" mnemonicParsing="false" onAction="#saveAutomata" prefHeight="25.0" prefWidth="126.0" text="Guardar autómata" />
          </children>
       </AnchorPane>
       <ScrollPane layoutX="6.0" layoutY="28.0" prefHeight="274.0" prefWidth="589.0">
