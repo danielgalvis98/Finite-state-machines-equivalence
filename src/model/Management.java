@@ -52,5 +52,29 @@ public class Management {
 		}
 	}
 	
+	public boolean verifyEquivalenceByMachine () {				
+		ArrayList<ArrayList<State>> partitions = directSumMachine.obtaintPartitions();
+		boolean containM1 = false;		
+		boolean containM2 = false;		
+		boolean checker = false;
+		for (int i = 0; i < partitions.size() && checker==true; i++) {
+			containM1 = false;	
+			containM2 = false;	
+			for (int j = 0; j < partitions.get(i).size() && (containM1==false && containM2==false)==false; j++) {
+				State state = partitions.get(i).get(j);			
+				if(m1.getStates().indexOf(state) != -1 && containM1!=true) {
+					containM1 = true;
+				}	
+				if(m2.getStates().indexOf(state) != -1 && containM2!=true) {
+					containM2 = true;
+				}
+			}
+			
+			checker = containM1 && containM2;
+		}
+		return checker;
+	}
+
+	
 
 }
