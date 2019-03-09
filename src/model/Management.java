@@ -1,8 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 
 public class Management {
 
@@ -22,7 +20,17 @@ public class Management {
 			m1.addOutputAlphabetElement(x);
 			m2.addOutputAlphabetElement(x);
 		}
+		
 	}
+	
+	public int getTotalStatesm1 () {
+		return m1.totStates;
+	}
+	
+	public int getTotalStatesm2 () {
+		return m2.totStates;
+	}
+	
 	public void renameStatesAndDoDirectSum() {
 		ArrayList<State> s1= m1.getStates();
 		ArrayList<State> s2= m2.getStates();

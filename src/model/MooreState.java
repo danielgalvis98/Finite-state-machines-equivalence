@@ -12,5 +12,6 @@ public class MooreState extends State{
 	public String getOutput(String input) {
 		return stateOutput;
 	}
+	
 
 }
