@@ -70,7 +70,6 @@ public class FiniteStateMachine {
 	}
 	private ArrayList<ArrayList<State>> auxToObtainPartitions(ArrayList<ArrayList<State>> arr, int quantOfPartitions){
 		ArrayList<ArrayList<State>> newPartition = new ArrayList<ArrayList<State>>();
-		ArrayList<ArrayList<State>> newClasses = new ArrayList<ArrayList<State>>();
 		for(int i=0;i<arr.size();i++) {
 			ArrayList<State> candidateOfNewClass= new ArrayList<State>();
 			ArrayList<State> actualClass= arr.get(i);
@@ -97,11 +96,10 @@ public class FiniteStateMachine {
 					}
 				}
 			}
-			if(candidateOfNewClass.size()!=0) {
-				newClasses.add(candidateOfNewClass);
-			}
+			newPartition.add(newActualClass);
+			newPartition.add(candidateOfNewClass);
 		}
-		newPartition.addAll(newClasses);
+		
 		if(newPartition.size()==arr.size()) {
 			return newPartition;
 		}else {
