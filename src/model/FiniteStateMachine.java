@@ -104,7 +104,8 @@ public class FiniteStateMachine {
 				}
 			}
 			newPartition.add(newActualClass);
-			newPartition.add(candidateOfNewClass);
+			if(candidateOfNewClass.size()!=0)
+				newPartition.add(candidateOfNewClass);
 		}
 		
 		if(newPartition.size()==arr.size()) {
