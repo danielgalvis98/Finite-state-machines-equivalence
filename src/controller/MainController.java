@@ -43,7 +43,7 @@ public class MainController implements Initializable{
 	
 
 	
-	
+	@FXML
 	public void saveInitialParameters (ActionEvent e) throws IOException {
 		char type;
 		if (radioMoore.isSelected()) {
