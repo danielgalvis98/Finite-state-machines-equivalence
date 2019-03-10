@@ -19,10 +19,10 @@ public class ControllerMachineState implements Initializable{
 	@FXML
 	AnchorPane rootPane;
 	
-	
+	@FXML
 	public void saveAutomata (ActionEvent e) throws IOException {
 		automataNumber++;
-		AnchorPane pane = FXMLLoader.load(getClass().getResource("/application/FrameMachineState.fxml"));
+		AnchorPane pane = FXMLLoader.load(getClass().getResource("/application/FrameParameters.fxml"));
 		rootPane.getChildren().setAll(pane);
 		System.out.println(automataNumber);
 	}
