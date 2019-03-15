@@ -70,7 +70,17 @@ public class MainController implements Initializable{
 			rootPane.getChildren().setAll(pane);
 			
 			//juanma
-			controlMachine.pintarAutomata(management.getMachine1());
+			controlMachine = new ControllerMachineState();
+			
+			if(type == FiniteStateMachine.MOORE) {
+				controlMachine.pintarAutomataMoore(management.getMachine1());	
+				controlMachine.pintarAutomataMoore(management.getMachine2());	
+			}else {
+				controlMachine.pintarAutomataMealy(management.getMachine1());
+				controlMachine.pintarAutomataMealy(management.getMachine2());
+			}
+			
+			
 			
 			
 		} catch (NumberFormatException ex) {

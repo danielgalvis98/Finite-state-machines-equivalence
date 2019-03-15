@@ -8,6 +8,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import model.FiniteStateMachine;
@@ -16,6 +18,8 @@ import model.Management;
 public class ControllerMachineState implements Initializable{
 
 	int automataNumber;
+
+	Management mundo;
 	
 	@FXML
 	GridPane gridMachineStade;
@@ -32,12 +36,12 @@ public class ControllerMachineState implements Initializable{
 		System.out.println(automataNumber);
 	}
 
-	public void pintarAutomata (FiniteStateMachine machine) {
-		gridMachineStade = new GridPane();
-		
-		for (int i = 0; i < machine.getInputAlphabet().size(); i++) {
-			gridMachineStade.add(machine.getInputAlphabet().);
-		}
+	//juanma
+	public void pintarAutomataMoore (FiniteStateMachine machine) {
+
+	}
+	
+	public void pintarAutomataMealy (FiniteStateMachine machine) {
 		
 	}
 	
