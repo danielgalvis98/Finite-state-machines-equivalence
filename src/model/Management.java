@@ -23,6 +23,16 @@ public class Management {
 		
 	}
 	
+	//juanma
+	public FiniteStateMachine getMachine1() {
+		return m1;
+	}
+	
+	public FiniteStateMachine getMachine2() {
+		return m2;
+	}
+	//
+	
 	public int getTotalStatesm1 () {
 		return m1.totStates;
 	}

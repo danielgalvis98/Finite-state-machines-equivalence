@@ -41,6 +41,8 @@ public class MainController implements Initializable{
 	@FXML
 	private TextField txtStatesSecondAutomata;
 	
+	private ControllerMachineState controlMachine;
+	
 
 	
 	@FXML
@@ -66,6 +68,11 @@ public class MainController implements Initializable{
 			management = new Management(inputAlphabet, outputAlphabet, type, statesFirst, statesSecond);
 			AnchorPane pane = FXMLLoader.load(getClass().getResource("/application/FrameMachineState.fxml"));
 			rootPane.getChildren().setAll(pane);
+			
+			//juanma
+			controlMachine.pintarAutomata(management.getMachine1());
+			
+			
 		} catch (NumberFormatException ex) {
 			Alert al = new Alert(Alert.AlertType.WARNING);
 			al.setContentText("El número de estados de los autómatas debe de ser un entero mayor a 0");
