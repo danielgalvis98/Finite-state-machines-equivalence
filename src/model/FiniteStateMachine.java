@@ -95,6 +95,16 @@ public class FiniteStateMachine {
 		}
 		return toR;
 	}
+	
+	//juanma
+	public String[] getOutputAlphabetArray() {
+		Object[] a= outputAlphabet.toArray();
+		String[] toR=  new String[a.length];
+		for(int i=0;i<toR.length;i++) {
+			toR[i]= (String) a[i];
+		}
+		return toR;
+	}
 
 	/**
 	 * Algorithm responsible for doing the first partitioning
