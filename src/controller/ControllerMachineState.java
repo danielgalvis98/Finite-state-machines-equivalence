@@ -1,6 +1,7 @@
 package controller;
 
 import java.awt.GridBagLayoutInfo;
+import java.awt.List;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -50,7 +51,6 @@ public class ControllerMachineState implements Initializable{
 	//juanma
 	
 	public void pintarTitulos (FiniteStateMachine machine) {
-		//gridMachineState = new GridPane();
 		for (int i = 0; i < machine.getInputAlphabetArray().length; i++) {
 			Label lb = new Label("    "+(machine.getInputAlphabetArray()[i])+"    ");
 			
@@ -70,67 +70,98 @@ public class ControllerMachineState implements Initializable{
 	}
 	
 	public ObservableList<String> aux (String[] alfabeto) {
-		
 		ObservableList<String> list = FXCollections.observableArrayList();
 		for (int i = 0; i < alfabeto.length; i++) {
 			list.add(alfabeto[i]);
 		}
 		return list;
 	}
-	
-	public void pintarAutomataMoore (FiniteStateMachine machine) {
-		
-		pintarTitulos(machine);
-		
-		ComboBox<String>cbEntradas = new ComboBox<String>(aux(machine.getInputAlphabetArray()));	
-		ComboBox<String>cbSalidas = new ComboBox<String>(aux(machine.getOutputAlphabetArray()));	
 
+	public void pintarCbInternosMoore(FiniteStateMachine machine) {
+		ArrayList<ArrayList<ComboBox<String>>> ListaCbEntradas = new ArrayList<ArrayList<ComboBox<String>>>();
+		
+		//machine.getStates().size()
+		//machine.getInputAlphabetArray().length
+		
+		for (int i = 0; i < 10; i++) {
+			ListaCbEntradas.add(new ArrayList<ComboBox<String>>());
+			for (int j = 0; j < 5; j++) {
+				ListaCbEntradas.get(i).add(new ComboBox<String>(aux(machine.getInputAlphabetArray())));
+			}
+		}
+				
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 5; j++) {
+				gridMachineState.add(ListaCbEntradas.get(i).get(j),j+1,i+1);
+			}
+		}
+		
+		//machine.getStates().size()
+		ArrayList<ComboBox<String>> ListaCbSalidas = new ArrayList<ComboBox<String>>();
+		for (int i = 0; i < 10; i++) {
+			ListaCbSalidas.add(new ComboBox<String>(aux(machine.getOutputAlphabetArray())));
+			gridMachineState.add(ListaCbSalidas.get(i),machine.getInputAlphabetArray().length+1,i+1);
+		}
+	}
+	
+	public void pintarCbInternosMealy(FiniteStateMachine machine) {
+		ArrayList<ArrayList<ComboBox<String>>> ListaCbEntradas = new ArrayList<ArrayList<ComboBox<String>>>();
+		ArrayList<ArrayList<ComboBox<String>>> ListaCbSalidas = new ArrayList<ArrayList<ComboBox<String>>>();
+		
+		//machine.getStates().size()
+		//machine.getInputAlphabetArray().length
+		for (int i = 0; i < 10; i++) {
+			ListaCbEntradas.add(new ArrayList<ComboBox<String>>());
+			ListaCbSalidas.add(new ArrayList<ComboBox<String>>());
+			for (int j = 0; j < 5; j++) {
+				ListaCbEntradas.get(i).add(new ComboBox<String>(aux(machine.getInputAlphabetArray())));
+				ListaCbSalidas.get(i).add(new ComboBox<String>(aux(machine.getOutputAlphabetArray())));
+			}
+		}
+		
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 5; j++) {
+				
+				GridPane gp = new GridPane();
+				gp.add(ListaCbEntradas.get(i).get(j),0,0);
+				gp.add(ListaCbSalidas.get(i).get(j),1,0);
+				
+				gridMachineState.add(gp,j+1,i+1);
+			}
+		}
+		
+	}
+	
+	public void pintarAutomataMoore (FiniteStateMachine machine) {		
+		pintarTitulos(machine);
+		/* - A B C D 
+		 * 1
+		 * 2
+		 */
 		Label lb = new Label("   Salida  ");
 		gridMachineState.add(lb,machine.getInputAlphabetArray().length+1,0);
 		/* - A B C D Salida
 		 * 1
 		 * 2
 		 */
-		
-		for (int i = 1; i < machine.getStates().size(); i++) {
-			for (int j = 1; j <  machine.getInputAlphabetArray().length; j++) {
-				gridMachineState.add(cbEntradas,j,i);
-			}
-			gridMachineState.add(cbSalidas,machine.getInputAlphabetArray().length+1,i);
-		}
-		
-		gridMachineState.add(cbEntradas,1,1);
-		gridMachineState.add(cbSalidas,machine.getInputAlphabetArray().length+1,1);
+		pintarCbInternosMoore(machine);
 		/* -  A B C D Salida
 		 *  1 + + + +    '
 		 *  2 + + + +    '
-		 */
-		
+		 */	
 	}
 	
 	public void pintarAutomataMealy (FiniteStateMachine machine) {
 		pintarTitulos(machine);
-
-		ComboBox<String>cbEntradas = new ComboBox<String>(aux(machine.getInputAlphabetArray()));	
-		ComboBox<String>cbSalidas = new ComboBox<String>(aux(machine.getOutputAlphabetArray()));	
-		
-		for (int i = 1; i < machine.getStates().size(); i++) {
-			for (int j = 0; j < machine.getInputAlphabetArray().length; j++) {
-				GridPane gp = new GridPane();
-				gp.add(cbEntradas,0,0);
-				gp.add(cbSalidas,1,0);
-				gridMachineState.add(gp,j,i);
-			}
-		}
-		
-		GridPane gp = new GridPane();
-		gp.add(cbEntradas,0,0);
-		gp.add(cbSalidas,1,0);
-		gridMachineState.add(gp,1,1);
+		/* - A B C D 
+		 * 1
+		 * 2
+		 */
+		pintarCbInternosMealy(machine);
 		
 		/* -  A  B  C  D
-		 * q1 +' +' +' +'
-		 * q2 +' +' +' +'
+		 * 1  +' +' +' +'
+		 * 2  +' +' +' +'
 		 */
 		
 	}
