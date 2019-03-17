@@ -1,11 +1,13 @@
 package controller;
 
+import java.awt.GridBagLayoutInfo;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -49,15 +51,16 @@ public class ControllerMachineState implements Initializable{
 	
 	public void pintarTitulos (FiniteStateMachine machine) {
 		//gridMachineState = new GridPane();
-		for (int i = 0; i < machine.getInputAlphabetArray().length; i++) {
-			Label lb = new Label(machine.getInputAlphabetArray()[i]);
+		for (int i = 0; i < machine.getInputAlphabetArray().length-1; i++) {
+			Label lb = new Label("    "+(machine.getInputAlphabetArray()[i])+"    ");
+			
 			gridMachineState.add(lb,i+1,0);	
 		}
 		/* - A B C
 		 * 
 		 */
 		for (int i = 0; i < machine.getTotalStates(); i++) {
-			Label lb = new Label((i+1) + "");
+			Label lb = new Label("  "+((i+1) + "")+"  ");
 			gridMachineState.add(lb,0,i+1);	
 		}
 		/* - A B C D
@@ -66,34 +69,36 @@ public class ControllerMachineState implements Initializable{
 		 */
 	}
 	
+	public ObservableList<String> aux (String[] alfabeto) {
+		
+		ObservableList<String> list = FXCollections.observableArrayList();
+		for (int i = 0; i < alfabeto.length; i++) {
+			list.add(alfabeto[i]);
+		}
+		return list;
+	}
+	
 	public void pintarAutomataMoore (FiniteStateMachine machine) {
 		
 		pintarTitulos(machine);
 		
-		ComboBox<String>cbEntradas = new ComboBox<String>();		
-		/*
-		ArrayList<String> alfabetoEntrada = (ArrayList<String>) Arrays.asList(machine.getInputAlphabetArray());
-		cbEntradas.setItems((ObservableList<String>) alfabetoEntrada);
-
-		 */
-		ComboBox<String>cbSalidas = new ComboBox<String>();
-		/*
-		ArrayList<String> alfabetoSalida = (ArrayList<String>) Arrays.asList(machine.getOutputAlphabetArray()); 
-		cbSalidas.setItems((ObservableList<String>) alfabetoSalida);
-		*/
-		Label lb = new Label("Salida");
+		ComboBox<String>cbEntradas = new ComboBox<String>(aux(machine.getInputAlphabetArray()));	
+		ComboBox<String>cbSalidas = new ComboBox<String>(aux(machine.getOutputAlphabetArray()));
+		
+		Label lb = new Label("  Salida  ");
 		gridMachineState.add(lb,machine.getInputAlphabetArray().length+1,0);
 		/* - A B C D Salida
 		 * q1
 		 * q2
 		 */
-		
+		/*
 		for (int i = 1; i < machine.getStates().size(); i++) {
 			for (int j = 1; j <  machine.getInputAlphabetArray().length; j++) {
 				gridMachineState.add(cbEntradas,j,i);
 			}
 			gridMachineState.add(cbSalidas,machine.getInputAlphabetArray().length+1,i);
 		}
+		*/
 		/* -  A B C D Salida
 		 * q1 + + + +    '
 		 * q2 + + + +    '
@@ -105,13 +110,15 @@ public class ControllerMachineState implements Initializable{
 		pintarTitulos(machine);
 		
 		ComboBox<String>cbEntradas = new ComboBox<String>();		
+		/*
 		ArrayList<String> alfabetoEntrada = (ArrayList<String>) Arrays.asList(machine.getInputAlphabetArray());
 		cbEntradas.setItems((ObservableList<String>) alfabetoEntrada);
-
+*/
 		ComboBox<String>cbSalidas = new ComboBox<String>();
+		/*
 		ArrayList<String> alfabetoSalida = (ArrayList<String>) Arrays.asList(machine.getOutputAlphabetArray()); 
 		cbSalidas.setItems((ObservableList<String>) alfabetoSalida);
-		
+		*/
 		for (int i = 1; i < machine.getStates().size(); i++) {
 			for (int j = 0; j < machine.getInputAlphabetArray().length; j++) {
 				GridPane gp = new GridPane();
