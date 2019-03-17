@@ -26,11 +26,15 @@ public class ControllerMachineState implements Initializable{
 	Management mundo;
 	
 	@FXML
-	GridPane gridMachineStade;
+	GridPane gridMachineState;
 
 	
 	@FXML
 	AnchorPane rootPane;
+	
+	public void setMundo(Management mun) {
+		mundo = mun;
+	}
 	
 	@FXML
 	public void saveAutomata (ActionEvent e) throws IOException {
@@ -38,22 +42,23 @@ public class ControllerMachineState implements Initializable{
 		AnchorPane pane = FXMLLoader.load(getClass().getResource("/application/FrameParameters.fxml"));
 		rootPane.getChildren().setAll(pane);
 		System.out.println(automataNumber);
+		pintarTitulos(mundo.getMachine1());
 	}
 
 	//juanma
 	
 	public void pintarTitulos (FiniteStateMachine machine) {
-		gridMachineStade = new GridPane();
+		//gridMachineState = new GridPane();
 		for (int i = 0; i < machine.getInputAlphabetArray().length; i++) {
 			Label lb = new Label(machine.getInputAlphabetArray()[i]);
-			gridMachineStade.add(lb,0,i+1);	
+			gridMachineState.add(lb,i+1,0);	
 		}
 		/* - A B C
 		 * 
 		 */
-		for (int i = 0; i < machine.getStates().size(); i++) {
-			Label lb = new Label(machine.getStates().get(i).getName());
-			gridMachineStade.add(lb,i+1,0);	
+		for (int i = 0; i < machine.getTotalStates(); i++) {
+			Label lb = new Label((i+1) + "");
+			gridMachineState.add(lb,0,i+1);	
 		}
 		/* - A B C D
 		 * E
@@ -77,7 +82,7 @@ public class ControllerMachineState implements Initializable{
 		cbSalidas.setItems((ObservableList<String>) alfabetoSalida);
 		*/
 		Label lb = new Label("Salida");
-		gridMachineStade.add(lb,0,machine.getInputAlphabetArray().length+1);
+		gridMachineState.add(lb,machine.getInputAlphabetArray().length+1,0);
 		/* - A B C D Salida
 		 * q1
 		 * q2
@@ -85,9 +90,9 @@ public class ControllerMachineState implements Initializable{
 		
 		for (int i = 1; i < machine.getStates().size(); i++) {
 			for (int j = 1; j <  machine.getInputAlphabetArray().length; j++) {
-				gridMachineStade.add(cbEntradas,i,j);
+				gridMachineState.add(cbEntradas,j,i);
 			}
-			gridMachineStade.add(cbSalidas,i,machine.getInputAlphabetArray().length+1);
+			gridMachineState.add(cbSalidas,machine.getInputAlphabetArray().length+1,i);
 		}
 		/* -  A B C D Salida
 		 * q1 + + + +    '
@@ -111,8 +116,8 @@ public class ControllerMachineState implements Initializable{
 			for (int j = 0; j < machine.getInputAlphabetArray().length; j++) {
 				GridPane gp = new GridPane();
 				gp.add(cbEntradas,0,0);
-				gp.add(cbSalidas,0,1);
-				gridMachineStade.add(gp,i,j);
+				gp.add(cbSalidas,1,0);
+				gridMachineState.add(gp,j,i);
 			}
 		}
 		/* -  A  B  C  D
