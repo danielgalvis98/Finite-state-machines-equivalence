@@ -97,23 +97,30 @@ public class Management {
 		}
 	}
 	/**
-	 * it verefies the equivalence of the two machines
+	 * it verifies the equivalence of the two machines
 	 * @return true if the two machines are equivalent, false in other case
 	 */
-	public boolean verifyEquivalenceByMachine () {				
+	public boolean verifyEquivalenceByMachine () {
+		renameStatesAndDoDirectSum();
 		ArrayList<ArrayList<State>> partitions = directSumMachine.obtaintPartitions();
+		for (int i = 0; i < partitions.size(); i++) {
+			System.out.println("");
+			for (int j = 0; j < partitions.get(i).size(); j++) {
+				System.out.print(partitions.get(i).get(j).getName() + "");
+			}
+		}
 		boolean containM1 = false;		
 		boolean containM2 = false;		
 		boolean checker = false;
-		for (int i = 0; i < partitions.size() && checker==true; i++) {
+		for (int i = 0; i < partitions.size() && checker; i++) {
 			containM1 = false;	
 			containM2 = false;	
-			for (int j = 0; j < partitions.get(i).size() && (containM1==false && containM2==false)==false; j++) {
+			for (int j = 0; j < partitions.get(i).size() && !containM1 || containM2; j++) {
 				State state = partitions.get(i).get(j);			
-				if(m1.getStates().indexOf(state) != -1 && containM1!=true) {
+				if(m1.getStates().indexOf(state) != -1 && !containM1) {
 					containM1 = true;
 				}	
-				if(m2.getStates().indexOf(state) != -1 && containM2!=true) {
+				if(m2.getStates().indexOf(state) != -1 && !containM2) {
 					containM2 = true;
 				}
 			}

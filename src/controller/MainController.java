@@ -70,14 +70,8 @@ public class MainController implements Initializable{
 			AnchorPane pane = loader.load();
 			controlMachine = loader.getController();
 			controlMachine.setMundo(management);
-			
-			//juanma
-			
-			if(type == FiniteStateMachine.MOORE) {
-				controlMachine.pintarAutomataMoore(management.getMachine1());	
-			}else {
-				controlMachine.pintarAutomataMealy(management.getMachine1());
-			}
+			controlMachine.setType(type);
+			controlMachine.advance();
 			
 			rootPane.getChildren().setAll(pane);
 			

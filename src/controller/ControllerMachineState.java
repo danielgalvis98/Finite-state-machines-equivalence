@@ -14,26 +14,36 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import model.FiniteStateMachine;
 import model.Management;
+import model.MealyState;
+import model.MooreState;
+import model.State;
 
 public class ControllerMachineState implements Initializable{
 
-	int automataNumber;
+	private int automataNumber;
 
-	Management mundo;
+	private Management mundo;
 	
 	@FXML
-	GridPane gridMachineState;
+	private GridPane gridMachineState;
 
+	private char type;
 	
 	@FXML
-	AnchorPane rootPane;
+	private AnchorPane rootPane;
+	
+	private ArrayList<ArrayList<ComboBox<String>>> listaCbEntradas;
+	private ArrayList<ComboBox<String>> listaCbSalidasMoore;
+	private ArrayList<ArrayList<ComboBox<String>>> listaCbSalidasMealy;
 	
 	public void setMundo(Management mun) {
 		mundo = mun;
@@ -41,11 +51,99 @@ public class ControllerMachineState implements Initializable{
 	
 	@FXML
 	public void saveAutomata (ActionEvent e) throws IOException {
+		boolean added = addStates(mundo.getMachine1());
+		if (added) {
+			added = addTransitions(mundo.getMachine1());
+		}
+		if (added) {
+			advance();
+		}
+	}
+	
+	public void advance() throws IOException {
 		automataNumber++;
-		AnchorPane pane = FXMLLoader.load(getClass().getResource("/application/FrameParameters.fxml"));
-		rootPane.getChildren().setAll(pane);
-		System.out.println(automataNumber);
-		pintarTitulos(mundo.getMachine1());
+		if (automataNumber <= 2) {
+			gridMachineState.getChildren().setAll();
+			if (automataNumber == 1) {
+				if (type == FiniteStateMachine.MEALY) {
+					pintarAutomataMealy(mundo.getMachine1());
+				} else {
+					pintarAutomataMoore(mundo.getMachine1());
+				}
+			} else {
+				if (type == FiniteStateMachine.MEALY) {
+					pintarAutomataMealy(mundo.getMachine2());
+				} else {
+					pintarAutomataMoore(mundo.getMachine2());
+				}
+			}
+			gridMachineState.setGridLinesVisible(true);
+		} else {
+			System.out.println("y");
+			boolean equivalents = mundo.verifyEquivalenceByMachine();
+			Alert alert;
+			if (equivalents) {
+				alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("EQUIVALENTES");
+				alert.setHeaderText("Felicidades!");
+				alert.setContentText("LOS AUTOMATAS SON EQUIVALENTES!!");
+			} else {
+				alert = new Alert(AlertType.WARNING);
+				alert.setTitle("NO EQUIVALENTES");
+				alert.setHeaderText(":(");
+				alert.setContentText("LOS AUTOMATAS NO SON EQUIVALENTES :C");
+			}
+			alert.showAndWait();
+			AnchorPane pane = FXMLLoader.load(getClass().getResource("/application/FrameParameters.fxml"));
+			rootPane.getChildren().setAll(pane);
+		}
+	}
+	
+	
+	public boolean addStates(FiniteStateMachine machine) {
+		boolean added = true;
+		machine.getStates().clear();
+		for (int i = 0; i < listaCbEntradas.size(); i++) {
+			if (machine.getType() == FiniteStateMachine.MOORE) {
+				String s = listaCbSalidasMoore.get(i).getValue();
+				if (s == null) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Error agregando estado");
+					alert.setContentText("El estado " + (i+1) + " no tiene salida asignada");
+					alert.showAndWait();
+					added = false;
+				} else 
+				machine.addState(new MooreState(i + "", s));
+			} else {
+				machine.addState(new MealyState(i + ""));
+			}
+		}
+		return added;
+	}
+	
+	public boolean addTransitions(FiniteStateMachine machine) {
+		boolean added = true;
+		for (int i = 0; i < listaCbEntradas.size(); i++) {
+			for (int j = 0; j < listaCbEntradas.get(i).size(); j++) {
+				try {
+					int toState = Integer.parseInt(listaCbEntradas.get(i).get(j).getValue());
+					machine.addStateTransition(machine.getInputAlphabetArray()[j], i, toState-1);
+					if (machine.getType() == FiniteStateMachine.MEALY) {
+						String out = listaCbSalidasMealy.get(i).get(j).getValue();
+						machine.addOutputTransition(machine.getInputAlphabetArray()[j], i, out);
+					}
+					
+				} catch (Exception e) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Error agregando transiciones");
+					alert.setContentText("Asegurese que para el estado " + (i+1) + " tenga una transición y una salida"
+							+ "asignada para la entrada " + machine.getInputAlphabetArray()[j]);
+					alert.showAndWait();
+					added = false;
+				}
+			}
+		}
+		return added;
 	}
 
 	//juanma
@@ -78,53 +176,57 @@ public class ControllerMachineState implements Initializable{
 	}
 
 	public void pintarCbInternosMoore(FiniteStateMachine machine) {
-		ArrayList<ArrayList<ComboBox<String>>> ListaCbEntradas = new ArrayList<ArrayList<ComboBox<String>>>();
+		listaCbEntradas = new ArrayList<ArrayList<ComboBox<String>>>();
 		
 		//machine.getStates().size()
 		//machine.getInputAlphabetArray().length
 		
-		for (int i = 0; i < 10; i++) {
-			ListaCbEntradas.add(new ArrayList<ComboBox<String>>());
-			for (int j = 0; j < 5; j++) {
-				ListaCbEntradas.get(i).add(new ComboBox<String>(aux(machine.getInputAlphabetArray())));
+		String [] states = new String [machine.getTotalStates()];
+		for (int i = 0; i < machine.getTotalStates(); i++) {
+			states[i] = (i+1) + "";
+		}
+		for (int i = 0; i < machine.getTotalStates(); i++) {
+			listaCbEntradas.add(new ArrayList<ComboBox<String>>());
+			for (int j = 0; j < machine.getInputAlphabetArray().length; j++) {
+				listaCbEntradas.get(i).add(new ComboBox<String>(aux(states)));
+				gridMachineState.add(listaCbEntradas.get(i).get(j),j+1,i+1);
 			}
 		}
 				
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 5; j++) {
-				gridMachineState.add(ListaCbEntradas.get(i).get(j),j+1,i+1);
-			}
-		}
-		
 		//machine.getStates().size()
-		ArrayList<ComboBox<String>> ListaCbSalidas = new ArrayList<ComboBox<String>>();
-		for (int i = 0; i < 10; i++) {
-			ListaCbSalidas.add(new ComboBox<String>(aux(machine.getOutputAlphabetArray())));
-			gridMachineState.add(ListaCbSalidas.get(i),machine.getInputAlphabetArray().length+1,i+1);
+		listaCbSalidasMoore = new ArrayList<ComboBox<String>>();
+		for (int i = 0; i < machine.getTotalStates(); i++) {
+			listaCbSalidasMoore.add(new ComboBox<String>(aux(machine.getOutputAlphabetArray())));
+			gridMachineState.add(listaCbSalidasMoore.get(i),machine.getInputAlphabetArray().length+1,i+1);
 		}
 	}
 	
 	public void pintarCbInternosMealy(FiniteStateMachine machine) {
-		ArrayList<ArrayList<ComboBox<String>>> ListaCbEntradas = new ArrayList<ArrayList<ComboBox<String>>>();
-		ArrayList<ArrayList<ComboBox<String>>> ListaCbSalidas = new ArrayList<ArrayList<ComboBox<String>>>();
+		listaCbEntradas = new ArrayList<ArrayList<ComboBox<String>>>();
+		listaCbSalidasMealy = new ArrayList<ArrayList<ComboBox<String>>>();
+		
+		String [] states = new String [machine.getTotalStates()];
+		for (int i = 0; i < machine.getTotalStates(); i++) {
+			states[i] = (i+1) + "";
+		}
 		
 		//machine.getStates().size()
 		//machine.getInputAlphabetArray().length
-		for (int i = 0; i < 10; i++) {
-			ListaCbEntradas.add(new ArrayList<ComboBox<String>>());
-			ListaCbSalidas.add(new ArrayList<ComboBox<String>>());
-			for (int j = 0; j < 5; j++) {
-				ListaCbEntradas.get(i).add(new ComboBox<String>(aux(machine.getInputAlphabetArray())));
-				ListaCbSalidas.get(i).add(new ComboBox<String>(aux(machine.getOutputAlphabetArray())));
+		for (int i = 0; i < machine.getTotalStates(); i++) {
+			listaCbEntradas.add(new ArrayList<ComboBox<String>>());
+			listaCbSalidasMealy.add(new ArrayList<ComboBox<String>>());
+			for (int j = 0; j < machine.getInputAlphabetArray().length; j++) {
+				listaCbEntradas.get(i).add(new ComboBox<String>(aux(states)));
+				listaCbSalidasMealy.get(i).add(new ComboBox<String>(aux(machine.getOutputAlphabetArray())));
 			}
 		}
 		
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 5; j++) {
+		for (int i = 0; i < machine.getTotalStates(); i++) {
+			for (int j = 0; j < machine.getInputAlphabetArray().length; j++) {
 				
 				GridPane gp = new GridPane();
-				gp.add(ListaCbEntradas.get(i).get(j),0,0);
-				gp.add(ListaCbSalidas.get(i).get(j),1,0);
+				gp.add(listaCbEntradas.get(i).get(j),0,0);
+				gp.add(listaCbSalidasMealy.get(i).get(j),1,0);
 				
 				gridMachineState.add(gp,j+1,i+1);
 			}
@@ -166,10 +268,13 @@ public class ControllerMachineState implements Initializable{
 		
 	}
 	
+	public void setType (char type) {
+		this.type = type;
+	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		automataNumber++;
+		automataNumber = 0;
 	}
 	
 }
