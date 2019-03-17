@@ -67,18 +67,17 @@ public class MainController implements Initializable{
 			if (statesFirst <= 0 || statesSecond <= 0) throw new NumberFormatException();
 			management = new Management(inputAlphabet, outputAlphabet, type, statesFirst, statesSecond);
 			AnchorPane pane = FXMLLoader.load(getClass().getResource("/application/FrameMachineState.fxml"));
-			rootPane.getChildren().setAll(pane);
 			
 			//juanma
 			controlMachine = new ControllerMachineState();
 			
 			if(type == FiniteStateMachine.MOORE) {
 				controlMachine.pintarAutomataMoore(management.getMachine1());	
-				controlMachine.pintarAutomataMoore(management.getMachine2());	
 			}else {
-				controlMachine.pintarAutomataMealy(management.getMachine1());
-				controlMachine.pintarAutomataMealy(management.getMachine2());
+				//controlMachine.pintarAutomataMealy(management.getMachine1());
 			}
+			
+			rootPane.getChildren().setAll(pane);
 			
 			
 			
