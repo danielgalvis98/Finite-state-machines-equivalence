@@ -76,7 +76,7 @@ public class MainController implements Initializable{
 			if(type == FiniteStateMachine.MOORE) {
 				controlMachine.pintarAutomataMoore(management.getMachine1());	
 			}else {
-				//controlMachine.pintarAutomataMealy(management.getMachine1());
+				controlMachine.pintarAutomataMealy(management.getMachine1());
 			}
 			
 			rootPane.getChildren().setAll(pane);
