@@ -1,13 +1,33 @@
 package model;
 
 import java.util.ArrayList;
-
+/**
+ * Is the class that manages the states machines
+ * @author 
+ *
+ */
 public class Management {
 
+	/**
+	 * Is the machine that results of the sum direct machine
+	 */
 	private FiniteStateMachine directSumMachine;
+	/**
+	 * The first machine
+	 */
 	private FiniteStateMachine m1; 
+	/**
+	 * The second machine
+	 */
 	private FiniteStateMachine m2;
-	
+	/**
+	 * Constructor for the management class
+	 * @param inputAlphabet the input alphabet of the machines
+	 * @param outputAlphabet the output alphabet of the machines
+	 * @param type the type of the machines
+	 * @param totStatesMachine1 total states of the machine 1
+	 * @param totStatesMachine2 total states of the machine 2
+	 */
 	public Management (String [] inputAlphabet, String [] outputAlphabet, char type, int totStatesMachine1, int totStatesMachine2) {
 		m1 = new FiniteStateMachine(type, totStatesMachine1);
 		m2 = new FiniteStateMachine(type, totStatesMachine2);
@@ -24,23 +44,38 @@ public class Management {
 	}
 	
 	//juanma
+	/**
+	 * returns the machine 1
+	 * @return FiniteStateMachine
+	 */
 	public FiniteStateMachine getMachine1() {
 		return m1;
 	}
-	
+	/**
+	 * returns the machine 2
+	 * @return FiniteStateMachine
+	 */
 	public FiniteStateMachine getMachine2() {
 		return m2;
 	}
 	//
-	
+	/**
+	 * returns the total of states in machine 1
+	 * @return int total of states in machine 1
+	 */
 	public int getTotalStatesm1 () {
 		return m1.totStates;
 	}
-	
+	/**
+	 * returns the total of states in machine 2
+	 * @return int total of states in machine 2
+	 */
 	public int getTotalStatesm2 () {
 		return m2.totStates;
 	}
-	
+	/**
+	 * renames the states and does the direct sum of the machines
+	 */
 	public void renameStatesAndDoDirectSum() {
 		ArrayList<State> s1= m1.getStates();
 		ArrayList<State> s2= m2.getStates();
@@ -61,7 +96,10 @@ public class Management {
 			}
 		}
 	}
-	
+	/**
+	 * it verefies the equivalence of the two machines
+	 * @return true if the two machines are equivalent, false in other case
+	 */
 	public boolean verifyEquivalenceByMachine () {				
 		ArrayList<ArrayList<State>> partitions = directSumMachine.obtaintPartitions();
 		boolean containM1 = false;		
