@@ -7,14 +7,14 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="504.0" prefWidth="762.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerMachineState">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerMachineState">
    <children>
       <AnchorPane layoutY="332.0" prefHeight="68.0" prefWidth="600.0" />
-      <ScrollPane layoutX="6.0" layoutY="28.0" prefHeight="384.0" prefWidth="719.0">
+      <ScrollPane layoutX="6.0" layoutY="28.0" prefHeight="440.0" prefWidth="775.0">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="405.0" prefWidth="740.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="453.0" prefWidth="793.0">
                <children>
-                  <GridPane fx:id="gridMachineState" gridLinesVisible="true" layoutX="28.0" layoutY="23.0" prefHeight="330.0" prefWidth="651.0">
+                  <GridPane fx:id="gridMachineState" gridLinesVisible="true" layoutX="28.0" layoutY="23.0" prefHeight="382.0" prefWidth="714.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
@@ -26,6 +26,6 @@
             </AnchorPane>
         </content>
       </ScrollPane>
-      <Button layoutX="605.0" layoutY="444.0" mnemonicParsing="false" onAction="#saveAutomata" prefHeight="25.0" prefWidth="126.0" text="Guardar autómata" />
+      <Button layoutX="655.0" layoutY="497.0" mnemonicParsing="false" onAction="#saveAutomata" prefHeight="25.0" prefWidth="126.0" text="Guardar autómata" />
    </children>
 </AnchorPane>
