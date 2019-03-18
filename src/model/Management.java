@@ -121,7 +121,7 @@ public class Management {
 		for (int i = 0; i < partitions.size() && checker; i++) {
 			containM1 = false;	
 			containM2 = false;	
-			for (int j = 0; j < partitions.get(i).size() && (!containM1 || !containM2); j++) {
+			for (int j = 0; j < partitions.get(i).size(); j++) {
 				State state = partitions.get(i).get(j);
 				if (state == m1.getStates().get(0))
 					indexInitialm1 = i;
