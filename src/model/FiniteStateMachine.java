@@ -157,6 +157,7 @@ public class FiniteStateMachine {
 			ArrayList<State> newActualClass= new ArrayList<State>();
 			HashSet<Integer> positionsOfSucesors= new HashSet<Integer>();
 			for(int j=0;j<actualClass.size();j++) {
+				HashMap<Integer, Boolean> hashToVerify= new HashMap<Integer, Boolean>();
 				if(j==0) {
 					newActualClass.add(actualClass.get(j));
 					for(State x:actualClass.get(j).getStateTransition().values()) {
@@ -165,10 +166,17 @@ public class FiniteStateMachine {
 				}else {
 					boolean sameClassesOfSucesors=true;
 					for(State x:actualClass.get(j).getStateTransition().values()) {
+						hashToVerify.put(indexesOfPartition.get(x), true);
 						if(!positionsOfSucesors.contains(indexesOfPartition.get(x))) {
 							sameClassesOfSucesors=false;
 						}
 					}
+					for(int y: positionsOfSucesors) {
+						if(!hashToVerify.containsKey(y)) {
+							sameClassesOfSucesors= false;
+						}
+					}
+					
 					if(!sameClassesOfSucesors) {
 						State toMove= actualClass.get(j);
 						candidateOfNewClass.add(toMove);
