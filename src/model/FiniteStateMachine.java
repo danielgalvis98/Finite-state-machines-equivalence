@@ -300,10 +300,14 @@ public class FiniteStateMachine {
 	 */
 	public void deleteInaccessibleStates() {
 		HashSet<State> accesibleStates = getAccesibleStates();
+		ArrayList<State> innacsible = new ArrayList<State>();
 		for (State st : states) {
 			if (!accesibleStates.contains(st)) {
-				states.remove(st);
+				innacsible.add(st);
 			}
+		}
+		for (State st : innacsible) {
+			states.remove(st);
 		}
 	}
 	/**

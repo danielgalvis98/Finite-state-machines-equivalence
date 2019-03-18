@@ -51,9 +51,18 @@ public class ControllerMachineState implements Initializable{
 	
 	@FXML
 	public void saveAutomata (ActionEvent e) throws IOException {
-		boolean added = addStates(mundo.getMachine1());
+		boolean added;
+		if (automataNumber == 1) {
+			added = addStates(mundo.getMachine1());
+		} else {
+			added = addStates(mundo.getMachine2());
+		}
 		if (added) {
-			added = addTransitions(mundo.getMachine1());
+			if (automataNumber == 1) {
+				added = addTransitions(mundo.getMachine1());
+			} else {
+				added = addTransitions(mundo.getMachine2());
+			}
 		}
 		if (added) {
 			advance();
@@ -64,6 +73,7 @@ public class ControllerMachineState implements Initializable{
 		automataNumber++;
 		if (automataNumber <= 2) {
 			gridMachineState.getChildren().setAll();
+			gridMachineState.setGridLinesVisible(true);
 			if (automataNumber == 1) {
 				if (type == FiniteStateMachine.MEALY) {
 					pintarAutomataMealy(mundo.getMachine1());
@@ -77,9 +87,7 @@ public class ControllerMachineState implements Initializable{
 					pintarAutomataMoore(mundo.getMachine2());
 				}
 			}
-			gridMachineState.setGridLinesVisible(true);
 		} else {
-			System.out.println("y");
 			boolean equivalents = mundo.verifyEquivalenceByMachine();
 			Alert alert;
 			if (equivalents) {
